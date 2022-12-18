@@ -1,0 +1,36 @@
+"""
+Original author: Luiz Irber (except for the parameter fiddling :)
+
+Updated by Tessa Pierce and CTB.
+"""
+
+configfile: "config.yml"
+
+rule download_catalog_from_ncbi:
+    output: "metagenomes_source.csv"
+    shell: """
+        wget -O {output} 'http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&db=sra&rettype=runinfo&term=("METAGENOMIC"[source] NOT amplicon[All Fields])'
+    """
+
+rule catalog_local_metagenomes:
+    input:
+        source_catalog = "metagenomes_source.csv"
+    output:
+        catalog = config['catalog_out']
+    run:
+        import csv
+        from pathlib import Path
+
+        # CTB: what the heck is this file? :laugh:
+        sraids = set(Path("/group/ctbrowngrp/irber/sra_search/inputs/mash_sraids.txt").read_text().split('\n'))
+
+        with open("metagenomes_source") as fp:
+            data = csv.DictReader(fp, delimiter=',')
+            for dataset in data:
+                sraids.add(dataset['Run'])
+
+        with open(output[0], 'w') as fout:
+            for sraid in sraids:
+                sig_path = Path(config['wort_sigs']) / f"{sraid}.sig"
+                if sig_path.exists():
+                    fout.write(f"{sig_path}\n")

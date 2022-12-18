@@ -1,0 +1,4 @@
+wort_sigs: /group/ctbrowngrp/irber/data/wort-data/wort-sra/sigs
+
+# farm location: /group/ctbrowngrp/sra_search/catalogs/metagenomes
+catalog_out: "metagenomes_catalog_latest.txt"
