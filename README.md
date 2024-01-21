@@ -1,4 +1,11 @@
-# branchwater
+# branchwater-notes
+
+> [!IMPORTANT]  
+> **ARCHIVED REPO**
+> 
+> See https://github.com/sourmash-bio/branchwater for updates
+
+---
 
 This is the central repository for branchwater.
 
